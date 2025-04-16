@@ -36,6 +36,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { CourseCard } from "@/components/page/courses/course-card";
+import { H2 } from "@/components/display/typography";
 
 // Simulación de permisos de usuario (en una aplicación real, esto vendría del backend)
 const userPermissions = {
@@ -51,9 +52,9 @@ export default function CoursesPage() {
 
   return (
     <>
-      <div className="container p-6">
+      <div className="w-full px-6">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold">Mis Cursos</h1>
+          <H2>Mis Cursos</H2>
           <div className="flex items-center space-x-2">
             <div className="relative">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />

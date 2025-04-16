@@ -46,7 +46,6 @@ export default function CoursePage({ params }) {
           <Button asChild variant="ghost" size="sm" className="mr-2">
             <Link href="/courses">
               <ArrowLeft className="h-4 w-4 mr-1" />
-              Volver a Cursos
             </Link>
           </Button>
           <Separator orientation="vertical" className="h-6 mx-2" />
