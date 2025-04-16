@@ -1,9 +1,7 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 import {
-  ArrowUpCircleIcon,
-  BarChartIcon,
   Calendar,
   CameraIcon,
   ClipboardListIcon,
@@ -11,30 +9,25 @@ import {
   FileCodeIcon,
   FileIcon,
   FileTextIcon,
-  FolderIcon,
   GraduationCap,
   HelpCircleIcon,
-  LayoutDashboardIcon,
+  Home,
   ListIcon,
   Mail,
   SearchIcon,
-  SettingsIcon,
-  UsersIcon,
-} from "lucide-react"
+} from "lucide-react";
 
-import { NavDocuments } from "@/components/layout/nav-documents"
-import { NavMain } from "@/components/layout/nav-main"
-import { NavSecondary } from "@/components/layout/nav-secondary"
-import { NavUser } from "@/components/layout/nav-user"
+import { NavDocuments } from "@/components/layout/nav-documents";
+import { NavMain } from "@/components/layout/nav-main";
+import { NavSecondary } from "@/components/layout/nav-secondary";
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
 
 const data = {
   user: {
@@ -44,29 +37,24 @@ const data = {
   },
   navMain: [
     {
-      title: "Dashboard",
-      url: "/",
-      icon: LayoutDashboardIcon,
+      title: "Inicio",
+      url: "/dashboard",
+      icon: Home,
     },
     {
-      title: "My Courses",
+      title: "Mis Cursos",
       url: "/courses",
       icon: ListIcon,
     },
     {
-      title: "Calendar",
+      title: "Calendario",
       url: "/calendar",
       icon: Calendar,
     },
     {
-      title: "Messages",
+      title: "Mensajes",
       url: "/messages",
       icon: Mail,
-    },
-    {
-      title: "Team",
-      url: "#",
-      icon: UsersIcon,
     },
   ],
   navClouds: [
@@ -119,39 +107,34 @@ const data = {
   ],
   navSecondary: [
     {
-      title: "Settings",
-      url: "#",
-      icon: SettingsIcon,
-    },
-    {
-      title: "Get Help",
+      title: "Ayuda",
       url: "#",
       icon: HelpCircleIcon,
     },
     {
-      title: "Search",
+      title: "Buscar",
       url: "#",
       icon: SearchIcon,
     },
   ],
   documents: [
     {
-      name: "Data Library",
+      name: "Librería",
       url: "#",
       icon: DatabaseIcon,
     },
     {
-      name: "Reports",
+      name: "Reportes",
       url: "#",
       icon: ClipboardListIcon,
     },
     {
-      name: "Word Assistant",
+      name: "Asistente",
       url: "#",
       icon: FileIcon,
     },
   ],
-}
+};
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
@@ -165,7 +148,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             >
               <a href="#">
                 <GraduationCap />
-                <span className="text-base font-semibold">School name</span>
+                <span className="text-base font-semibold">Saberis</span>
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -176,9 +159,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavDocuments items={data.documents} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
-      <SidebarFooter>
-        <NavUser user={data.user} />
-      </SidebarFooter>
     </Sidebar>
-  )
+  );
 }
