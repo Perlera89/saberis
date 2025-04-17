@@ -1,286 +1,232 @@
-import Link from "next/link"
-import { ArrowLeft, BookOpen, CheckCircle, ChevronDown, Download, FileText, PlayCircle } from "lucide-react"
+"use client";
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
-import { Separator } from "@/components/ui/separator"
+import { use } from "react";
+import Link from "next/link";
+import { ArrowLeft, Edit, Plus, Trash, Users, Video, Bell } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Progress } from "@/components/ui/progress";
+
+import { Separator } from "@/components/ui/separator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import ContentTab from "@/components/page/courses/tabs/content-tab";
+import AttendanceTab from "@/components/page/courses/tabs/attendance-tab";
+import ForumTab from "@/components/page/courses/tabs/forum-tab";
+import RatingTab from "@/components/page/courses/tabs/ratings-tab";
+import InfoTab from "@/components/page/courses/tabs/info-tab";
+
+// Simulación de permisos de usuario (en una aplicación real, esto vendría del backend)
+const userPermissions = {
+  isAdmin: true, // Cambiar a false para ver la vista de estudiante
+  canEditCourse: true,
+  canAddResources: true,
+  canManageStudents: true,
+  canViewAttendance: true,
+  canManageGrades: true,
+};
 
 export default function CoursePage({ params }) {
-  const courseId = Number.parseInt(params.id)
-  const course = courses.find((c) => c.id === courseId) || courses[0]
+  const unwrappedParams = use(params);
+  const courseId = Number.parseInt(unwrappedParams.id);
+  const course = courses.find((c) => c.id === courseId) || courses[0];
 
   return (
-    <div className="container p-6">
-      <div className="flex items-center mb-6">
-        <Button asChild variant="ghost" size="sm" className="mr-2">
-          <Link href="/courses">
-            <ArrowLeft className="h-4 w-4 mr-1" />
-            Back to Courses
-          </Link>
-        </Button>
-        <Separator orientation="vertical" className="h-6 mx-2" />
-        <div>
-          <h1 className="text-xl font-bold">{course.title}</h1>
-          <p className="text-sm text-muted-foreground">{course.instructor}</p>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2">
-          <Card className="mb-6">
-            <CardContent className="p-0">
-              <div className="aspect-video bg-muted flex items-center justify-center">
-                <div className="text-center">
-                  <PlayCircle className="h-16 w-16 text-primary mx-auto mb-2" />
-                  <p className="text-sm font-medium">Current Lesson: Introduction to Variables</p>
-                </div>
-              </div>
-              <div className="p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <h2 className="font-semibold">Your Progress</h2>
-                  <span className="text-sm font-medium">{course.progress}% Complete</span>
-                </div>
-                <Progress value={course.progress} className="h-2" />
-              </div>
-            </CardContent>
-          </Card>
-
-          <div className="mb-6">
-            <h2 className="font-semibold text-lg mb-4">Course Content</h2>
-
-            {modules.map((module, index) => (
-              <div key={module.id} className="mb-4">
-                <div className="flex items-center justify-between bg-card p-3 rounded-lg cursor-pointer">
-                  <div className="flex items-center">
-                    <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center mr-3">
-                      <span className="text-sm font-medium text-primary">{index + 1}</span>
-                    </div>
-                    <div>
-                      <h3 className="font-medium">{module.title}</h3>
-                      <p className="text-xs text-muted-foreground">
-                        {module.lessons.length} lessons • {module.duration}
-                      </p>
-                    </div>
-                  </div>
-                  <ChevronDown className="h-5 w-5 text-muted-foreground" />
-                </div>
-
-                <div className="mt-1 ml-8 pl-3 border-l-2 border-border">
-                  {module.lessons.map((lesson) => (
-                    <div
-                      key={lesson.id}
-                      className={`flex items-center p-3 rounded-lg my-2 ${
-                        lesson.completed ? "bg-primary/10" : "bg-card"
-                      }`}
-                    >
-                      <div className="mr-3">
-                        {lesson.type === "video" && <PlayCircle className="h-5 w-5 text-primary" />}
-                        {lesson.type === "reading" && <FileText className="h-5 w-5 text-primary" />}
-                        {lesson.type === "download" && <Download className="h-5 w-5 text-primary" />}
-                      </div>
-                      <div className="flex-1">
-                        <p className="font-medium text-sm">{lesson.title}</p>
-                        <p className="text-xs text-muted-foreground">{lesson.duration}</p>
-                      </div>
-                      {lesson.completed && <CheckCircle className="h-5 w-5 text-green-500" />}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
+    <>
+      <div className="w-full p-6">
+        <div className="flex items-center mb-6">
+          <Button asChild variant="ghost" size="sm" className="mr-2">
+            <Link href="/courses">
+              <ArrowLeft className="h-4 w-4 mr-1" />
+            </Link>
+          </Button>
+          <Separator orientation="vertical" className="h-6 mx-2" />
+          <div className="flex-1">
+            <h1 className="text-xl font-bold">{course.title}</h1>
+            <p className="text-sm text-muted-foreground">{course.instructor}</p>
           </div>
+          {userPermissions.canEditCourse && (
+            <div className="flex items-center gap-2">
+              <Button variant="outline" size="sm">
+                <Edit className="h-4 w-4 mr-2" />
+                Editar Curso
+              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm">
+                    <Plus className="h-4 w-4 mr-2" />
+                    Acciones
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  {userPermissions.canManageStudents && (
+                    <DropdownMenuItem>
+                      <Users className="h-4 w-4 mr-2" />
+                      Gestionar Estudiantes
+                    </DropdownMenuItem>
+                  )}
+                  <DropdownMenuItem>
+                    <Bell className="h-4 w-4 mr-2" />
+                    Enviar Notificación
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem className="text-destructive">
+                    <Trash className="h-4 w-4 mr-2" />
+                    Archivar Curso
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          )}
         </div>
 
-        <div>
-          <Card className="mb-6">
-            <CardContent className="p-4">
-              <h2 className="font-semibold mb-4">About This Course</h2>
-              <p className="text-sm text-muted-foreground mb-4">
-                {course.description ||
-                  "This comprehensive course covers all the fundamentals you need to know. Perfect for beginners and those looking to refresh their knowledge."}
-              </p>
-              <div className="grid grid-cols-2 gap-4 text-sm">
+        <Card className="mb-6 pt-0">
+          <CardContent className="p-0">
+            <div
+              className="w-full h-32 bg-cover bg-center bg-blue-500 rounded-t-xl"
+              // style={{
+              //   background:
+              //     course.color || "linear-gradient(to right, #3b82f6, #2563eb)",
+              //   backgroundImage: course.image
+              //     ? `url(${course.image})`
+              //     : undefined,
+              // }}
+            />
+            <div className="p-4">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                  <p className="text-muted-foreground">Duration</p>
-                  <p className="font-medium">8 weeks</p>
+                  <h2 className="text-xl font-bold">{course.title}</h2>
+                  <p className="text-sm text-muted-foreground">
+                    {course.category} • {course.code}
+                  </p>
                 </div>
-                <div>
-                  <p className="text-muted-foreground">Level</p>
-                  <p className="font-medium">Beginner</p>
-                </div>
-                <div>
-                  <p className="text-muted-foreground">Modules</p>
-                  <p className="font-medium">{modules.length}</p>
-                </div>
-                <div>
-                  <p className="text-muted-foreground">Lessons</p>
-                  <p className="font-medium">{modules.reduce((total, module) => total + module.lessons.length, 0)}</p>
+                <div className="flex flex-wrap gap-2">
+                  <Button size="sm" variant="outline" asChild>
+                    <Link href="#" className="flex items-center">
+                      <Video className="h-4 w-4 mr-2" />
+                      Unirse a Clase Virtual
+                    </Link>
+                  </Button>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+              <Separator className="my-4" />
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
+                <div>
+                  <p className="text-muted-foreground">Profesor</p>
+                  <p className="font-medium">{course.instructor}</p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground">Periodo</p>
+                  <p className="font-medium">{course.period}</p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground">Horario</p>
+                  <p className="font-medium">{course.schedule}</p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground">Progreso</p>
+                  <div className="flex items-center gap-2">
+                    <Progress value={course.progress} className="h-2 flex-1" />
+                    <span className="font-medium">{course.progress}%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
-          <Card>
-            <CardContent className="p-4">
-              <h2 className="font-semibold mb-4">Resources</h2>
-              <ul className="space-y-2">
-                <li>
-                  <Link href="#" className="text-sm text-primary hover:underline flex items-center">
-                    <FileText className="h-4 w-4 mr-2" />
-                    Course Syllabus
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="text-sm text-primary hover:underline flex items-center">
-                    <Download className="h-4 w-4 mr-2" />
-                    Lecture Slides
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="text-sm text-primary hover:underline flex items-center">
-                    <BookOpen className="h-4 w-4 mr-2" />
-                    Recommended Reading
-                  </Link>
-                </li>
-              </ul>
-            </CardContent>
-          </Card>
-        </div>
+        <Tabs defaultValue="content" className="mb-6">
+          <TabsList className="mb-4">
+            <TabsTrigger value="content">Contenido</TabsTrigger>
+            {userPermissions.canViewAttendance && (
+              <TabsTrigger value="attendance">Asistencia</TabsTrigger>
+            )}
+            <TabsTrigger value="rating">Calificaciones</TabsTrigger>
+            <TabsTrigger value="forum">Foro</TabsTrigger>
+            <TabsTrigger value="info">Información</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="content" className="space-y-6">
+            <ContentTab />
+          </TabsContent>
+
+          <TabsContent value="attendance">
+            <AttendanceTab />
+          </TabsContent>
+
+          <TabsContent value="rating">
+            <RatingTab />
+          </TabsContent>
+
+          <TabsContent value="forum">
+            <ForumTab />
+          </TabsContent>
+
+          <TabsContent value="info">
+            <InfoTab course={course} />
+          </TabsContent>
+        </Tabs>
       </div>
-    </div>
-  )
+    </>
+  );
 }
 
 const courses = [
   {
     id: 1,
-    title: "Introduction to Computer Science",
-    instructor: "Dr. Smith",
-    category: "Computer Science",
-    lastAccessed: "Yesterday",
+    title: "Introducción a la Informática",
+    code: "INF101",
+    instructor: "Dr. Martínez",
+    instructorTitle: "Profesor Titular",
+    instructorBio:
+      "Doctor en Ciencias de la Computación con más de 15 años de experiencia en enseñanza universitaria y desarrollo de software.",
+    category: "Informática",
+    lastAccessed: "Ayer",
     progress: 65,
     status: "in-progress",
+    period: "2025-1",
+    schedule: "Lunes y Miércoles, 10:00 - 12:00",
+    classroom: "Aula 305",
+    credits: 4,
+    prerequisites: "Ninguno",
     description:
-      "Learn the fundamentals of computer science, including algorithms, data structures, and programming concepts. This course is designed for beginners with no prior experience.",
+      "Aprende los fundamentos de la informática, incluyendo algoritmos, estructuras de datos y conceptos de programación. Este curso está diseñado para principiantes sin experiencia previa.",
+    color: "linear-gradient(to right, #3b82f6, #2563eb)",
   },
   {
     id: 2,
-    title: "Advanced Mathematics",
-    instructor: "Prof. Johnson",
-    category: "Mathematics",
-    lastAccessed: "2 days ago",
+    title: "Matemáticas Avanzadas",
+    code: "MAT201",
+    instructor: "Prof. Rodríguez",
+    category: "Matemáticas",
+    lastAccessed: "Hace 2 días",
     progress: 42,
     status: "in-progress",
+    period: "2025-1",
+    schedule: "Martes y Jueves, 14:00 - 16:00",
+    classroom: "Aula 210",
+    credits: 5,
   },
   {
     id: 3,
-    title: "Digital Marketing Fundamentals",
-    instructor: "Jane Doe",
-    category: "Business",
-    lastAccessed: "1 week ago",
+    title: "Fundamentos de Marketing Digital",
+    code: "MKT101",
+    instructor: "Ana López",
+    category: "Negocios",
+    lastAccessed: "Hace 1 semana",
     progress: 78,
     status: "in-progress",
+    period: "2025-1",
+    schedule: "Viernes, 09:00 - 13:00",
+    classroom: "Aula 115",
+    credits: 3,
   },
-]
-
-const modules = [
-  {
-    id: 1,
-    title: "Getting Started with Programming",
-    duration: "1 week",
-    lessons: [
-      {
-        id: 101,
-        title: "Course Introduction",
-        type: "video",
-        duration: "10 min",
-        completed: true,
-      },
-      {
-        id: 102,
-        title: "Setting Up Your Development Environment",
-        type: "reading",
-        duration: "15 min",
-        completed: true,
-      },
-      {
-        id: 103,
-        title: "Your First Program",
-        type: "video",
-        duration: "20 min",
-        completed: true,
-      },
-      {
-        id: 104,
-        title: "Practice Files",
-        type: "download",
-        duration: "5 min",
-        completed: true,
-      },
-    ],
-  },
-  {
-    id: 2,
-    title: "Variables and Data Types",
-    duration: "1 week",
-    lessons: [
-      {
-        id: 201,
-        title: "Introduction to Variables",
-        type: "video",
-        duration: "15 min",
-        completed: false,
-      },
-      {
-        id: 202,
-        title: "Working with Numbers",
-        type: "video",
-        duration: "20 min",
-        completed: false,
-      },
-      {
-        id: 203,
-        title: "Strings and Text Manipulation",
-        type: "reading",
-        duration: "25 min",
-        completed: false,
-      },
-      {
-        id: 204,
-        title: "Variables Exercise",
-        type: "download",
-        duration: "30 min",
-        completed: false,
-      },
-    ],
-  },
-  {
-    id: 3,
-    title: "Control Flow",
-    duration: "1 week",
-    lessons: [
-      {
-        id: 301,
-        title: "Conditional Statements",
-        type: "video",
-        duration: "25 min",
-        completed: false,
-      },
-      {
-        id: 302,
-        title: "Loops and Iterations",
-        type: "video",
-        duration: "30 min",
-        completed: false,
-      },
-      {
-        id: 303,
-        title: "Control Flow Practice",
-        type: "download",
-        duration: "45 min",
-        completed: false,
-      },
-    ],
-  },
-]
+];

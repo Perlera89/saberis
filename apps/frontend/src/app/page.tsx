@@ -1,138 +1,170 @@
 import Link from "next/link"
-import { Clock, ExternalLink } from "lucide-react"
+import { ArrowRight, BookOpen, Calendar, CheckCircle, GraduationCap, MessageSquare, Users } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
+import { Card, CardContent } from "@/components/ui/card"
 
-export default function Home() {
+export default function LandingPage() {
+
   return (
-    <div className="w-full p-6">
-      <section className="mb-8">
-        <h2 className="text-lg font-semibold mb-4">Course Overview</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {courses.map((course) => (
-            <Card key={course.id} className="overflow-hidden">
-              <div
-                className="h-32 relative"
-                style={{
-                  background: course.color || "linear-gradient(to right, #3b82f6, #2563eb)",
-                }}
-              >
-                <div className="absolute bottom-2 left-2 bg-background/90 text-xs font-medium px-2 py-1 rounded">
-                  {course.category}
-                </div>
-              </div>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-base">{course.title}</CardTitle>
-                <CardDescription className="text-xs">{course.instructor}</CardDescription>
-              </CardHeader>
-              <CardContent className="pb-2">
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between text-sm">
-                    <span>Progress</span>
-                    <span className="font-medium">{course.progress}%</span>
-                  </div>
-                  <Progress value={course.progress} className="h-2" />
-                </div>
-                <div className="flex items-center text-muted-foreground text-xs mt-2">
-                  <Clock className="h-3 w-3 mr-1" />
-                  <span>Last accessed: {course.lastAccessed}</span>
-                </div>
-              </CardContent>
-              <CardFooter className="pt-0">
-                <Button asChild variant="ghost" size="sm" className="w-full">
-                  <Link href={`/courses/${course.id}`}>Continue Course</Link>
-                </Button>
-              </CardFooter>
-            </Card>
-          ))}
-        </div>
-      </section>
-
-      <section>
-        <h2 className="text-lg font-semibold mb-4">Upcoming Activities</h2>
-        <Card>
-          <CardContent className="p-0">
-            <div className="divide-y divide-border">
-              {activities.map((activity) => (
-                <div key={activity.id} className="p-4 flex items-start justify-between">
-                  <div>
-                    <p className="font-medium text-sm">{activity.title}</p>
-                    <p className="text-sm text-muted-foreground">{activity.course}</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-sm font-medium">{activity.dueDate}</p>
-                    <p className="text-xs text-muted-foreground">{activity.type}</p>
-                  </div>
-                </div>
-              ))}
+    <>
+      <div className="container mx-auto px-6">
+        {/* Hero Section */}
+        <section className="py-12 md:py-20 flex flex-col md:flex-row items-center gap-8">
+          <div className="flex-1 space-y-6">
+            <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
+              Aprende sin límites con <span className="text-muted-foreground">Saberis</span>
+            </h1>
+            <p className="text-xl text-muted-foreground">
+              Una plataforma de aprendizaje moderna y accesible para estudiantes y educadores.
+            </p>
+            <div className="flex flex-wrap gap-4 pt-4">
+              <Button size="lg" asChild>
+                <Link href="/dashboard">
+                  Acceder ahora <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+              <Button size="lg" variant="outline">
+                Conocer más
+              </Button>
             </div>
-          </CardContent>
-          <CardFooter className="border-t border-border">
-            <Button variant="ghost" size="sm" className="w-full" asChild>
-              <Link href="/calendar">
-                View All Activities
-                <ExternalLink className="ml-2 h-4 w-4" />
+          </div>
+          <div className="flex-1 flex justify-center">
+            <div className="relative w-full max-w-md aspect-video bg-gradient-to-br from-primary/20 to-primary/10 rounded-lg flex items-center justify-center">
+              <GraduationCap className="h-24 w-24 text-primary" />
+            </div>
+          </div>
+        </section>
+
+        {/* Features Section */}
+        <section className="py-12 md:py-20">
+          <h2 className="text-3xl font-bold text-center mb-12">Características principales</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <FeatureCard
+              icon={<BookOpen className="h-10 w-10 text-primary" />}
+              title="Cursos interactivos"
+              description="Accede a contenido educativo de alta calidad con videos, lecturas y evaluaciones interactivas."
+            />
+            <FeatureCard
+              icon={<Calendar className="h-10 w-10 text-primary" />}
+              title="Calendario integrado"
+              description="Organiza tu tiempo de estudio con recordatorios de fechas límite y eventos importantes."
+            />
+            <FeatureCard
+              icon={<MessageSquare className="h-10 w-10 text-primary" />}
+              title="Comunicación directa"
+              description="Mantente en contacto con profesores y compañeros a través de nuestro sistema de mensajería."
+            />
+            <FeatureCard
+              icon={<CheckCircle className="h-10 w-10 text-primary" />}
+              title="Seguimiento de progreso"
+              description="Visualiza tu avance en cada curso y recibe recomendaciones personalizadas."
+            />
+            <FeatureCard
+              icon={<Users className="h-10 w-10 text-primary" />}
+              title="Aprendizaje colaborativo"
+              description="Trabaja en proyectos grupales y comparte conocimientos con otros estudiantes."
+            />
+            <FeatureCard
+              icon={<GraduationCap className="h-10 w-10 text-primary" />}
+              title="Certificaciones"
+              description="Obtén certificados al completar cursos y demuestra tus nuevas habilidades."
+            />
+          </div>
+        </section>
+
+        {/* CTA Section */}
+        <section className="py-12 md:py-20">
+          <div className="bg-primary/10 rounded-xl p-8 md:p-12 text-center">
+            <h2 className="text-3xl font-bold mb-4">¿Listo para comenzar tu viaje de aprendizaje?</h2>
+            <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+              Únete a miles de estudiantes que ya están transformando su educación con Saberis.
+            </p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <Button size="lg" asChild>
+                <Link href="/dashboard">Acceder ahora</Link>
+              </Button>
+              <Button size="lg" variant="outline">
+                Solicitar demostración
+              </Button>
+            </div>
+          </div>
+        </section>
+
+        {/* Testimonials Section */}
+        <section className="py-12 md:py-20">
+          <h2 className="text-3xl font-bold text-center mb-12">Lo que dicen nuestros usuarios</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <TestimonialCard
+              quote="Saberis ha transformado completamente la forma en que imparto mis clases. Mis estudiantes están más comprometidos que nunca."
+              author="Prof. García"
+              role="Docente de Ciencias"
+            />
+            <TestimonialCard
+              quote="La plataforma es intuitiva y me permite organizar mi tiempo de estudio de manera eficiente. ¡Mis calificaciones han mejorado significativamente!"
+              author="Laura Méndez"
+              role="Estudiante"
+            />
+            <TestimonialCard
+              quote="Como administrador, valoro la facilidad con la que podemos gestionar cursos y usuarios. El soporte técnico es excepcional."
+              author="Carlos Ruiz"
+              role="Director Académico"
+            />
+          </div>
+        </section>
+      </div>
+
+      {/* Footer */}
+      <footer className="bg-muted mt-12 py-8">
+        <div className="container px-6">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <div className="flex items-center gap-2 mb-4 md:mb-0">
+              <GraduationCap className="h-6 w-6 text-primary" />
+              <span className="text-lg font-bold">Saberis</span>
+            </div>
+            <div className="flex gap-6">
+              <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
+                Términos
               </Link>
-            </Button>
-          </CardFooter>
-        </Card>
-      </section>
-    </div>
+              <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
+                Privacidad
+              </Link>
+              <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
+                Contacto
+              </Link>
+            </div>
+          </div>
+          <div className="mt-6 text-center md:text-left text-sm text-muted-foreground">
+            © 2025 Saberis. Todos los derechos reservados.
+          </div>
+        </div>
+      </footer>
+    </>
   )
 }
 
-const courses = [
-  {
-    id: 1,
-    title: "Introduction to Computer Science",
-    instructor: "Dr. Smith",
-    category: "Computer Science",
-    lastAccessed: "Yesterday",
-    progress: 65,
-    color: "linear-gradient(to right, #3b82f6, #2563eb)",
-  },
-  {
-    id: 2,
-    title: "Advanced Mathematics",
-    instructor: "Prof. Johnson",
-    category: "Mathematics",
-    lastAccessed: "2 days ago",
-    progress: 42,
-    color: "linear-gradient(to right, #8b5cf6, #6d28d9)",
-  },
-  {
-    id: 3,
-    title: "Digital Marketing Fundamentals",
-    instructor: "Jane Doe",
-    category: "Business",
-    lastAccessed: "1 week ago",
-    progress: 78,
-    color: "linear-gradient(to right, #ec4899, #be185d)",
-  },
-]
+function FeatureCard({ icon, title, description }) {
+  return (
+    <Card className="border-none shadow-none bg-muted/50">
+      <CardContent className="pt-6">
+        <div className="mb-4">{icon}</div>
+        <h3 className="text-xl font-semibold mb-2">{title}</h3>
+        <p className="text-muted-foreground">{description}</p>
+      </CardContent>
+    </Card>
+  )
+}
 
-const activities = [
-  {
-    id: 1,
-    title: "Week 3 Quiz",
-    course: "Introduction to Computer Science",
-    dueDate: "Tomorrow, 11:59 PM",
-    type: "Quiz",
-  },
-  {
-    id: 2,
-    title: "Problem Set 4",
-    course: "Advanced Mathematics",
-    dueDate: "Friday, 11:59 PM",
-    type: "Assignment",
-  },
-  {
-    id: 3,
-    title: "Marketing Campaign Analysis",
-    course: "Digital Marketing Fundamentals",
-    dueDate: "Next Monday, 11:59 PM",
-    type: "Project",
-  },
-]
+function TestimonialCard({ quote, author, role }) {
+  return (
+    <Card className="border-none shadow-none bg-muted/50">
+      <CardContent className="pt-6">
+        <p className="italic mb-4">"{quote}"</p>
+        <div>
+          <p className="font-semibold">{author}</p>
+          <p className="text-sm text-muted-foreground">{role}</p>
+        </div>
+      </CardContent>
+    </Card>
+  )
+}

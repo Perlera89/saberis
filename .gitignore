@@ -36,32 +36,3 @@ yarn-error.log*
 # Misc
 .DS_Store
 *.pem
-
-# backend
-.vscode/
-.idea/
-*.swp
-*.swo
-*.code-workspace
-
-# Prisma
-prisma/dev.db
-prisma/dev.db-journal
-prisma/*.sqlite
-prisma/migrations/
-!prisma/schema.prisma
-
-# TypeScript
-*.tsbuildinfo
-
-# Yarn
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
-
-*~
-.*.swp
-.*.swo

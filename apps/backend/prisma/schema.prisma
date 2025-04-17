@@ -20,12 +20,193 @@ enum UserRole {
 }
 
 model User {
-  id           String    @id @default(uuid())
-  name         String    @db.VarChar(100)
-  email        String    @unique @db.VarChar(150)
-  password     String    @db.VarChar(255)
-  passwordHash String    @map("password_hash")
-  role         UserRole  @default(student)
-  refreshToken String?   @map("refresh_token")
-  createdAt    DateTime  @default(now()) @map("created_at")
+  id           String   @id @unique @default(uuid()) @db.Uuid
+  name         String   @db.VarChar(100)
+  email        String   @unique @db.VarChar(255)
+  password     String   @db.VarChar(128)
+  passwordHash String   @map("password_hash") @db.VarChar(512)
+  role         UserRole @default(student)
+  refreshToken String?  @map("refresh_token")
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamp()
+  modifiedAt   DateTime @updatedAt @map("modified_at") @db.Timestamp()
+
+  instructorProfile InstructorProfile[]
+  //studentProfile    StudentProfile[]
+
+  @@map("Users")
+}
+
+model InstructorProfile {
+  id          String   @id @unique @default(uuid()) @db.Uuid
+  names       String   @db.VarChar(100)
+  surnames    String   @db.VarChar(100)
+  aboutMe     String?  @map("about_me") @db.Text
+  title       String?  @db.VarChar(5)
+  suffix      String?  @db.VarChar(5)
+  contactInfo String?  @map("contact_info") @db.Text
+  socialLinks String?  @map("social_links") @db.Text
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamp()
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamp()
+  userId      String   @map("user_id") @db.Uuid
+  user        User     @relation(fields: [userId], references: [id])
+
+  instructorCoursesProfile InstructorCourses[]
+
+  @@map("InstructorProfiles")
+}
+
+/**
+ * model StudentProfile {
+ * id        String   @id @default(uuid())
+ * user_id   String
+ * user      User     @relation(fields: [user_id], references: [id])
+ * firstName String   @map("first_name") @db.VarChar(100)
+ * lastName  String   @map("last_name") @db.VarChar(100)
+ * phone     String?  @db.VarChar(20)
+ * address   String?  @db.VarChar(255)
+ * createdAt DateTime @default(now()) @map("created_at")
+ * }
+ */
+
+model CourseCategory {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique @db.VarChar(100)
+  description String
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamp()
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamp()
+
+  classifications CourseClassification[]
+
+  @@map("CourseCategories")
+}
+
+model CourseSubcategory {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique @db.VarChar(100)
+  description String
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamp()
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamp()
+
+  classifications CourseClassification[]
+
+  @@map("CourseSubcategories")
+}
+
+model Course {
+  id              String   @id @unique @default(uuid()) @map("uuid") @db.Uuid
+  title           String   @db.VarChar(200)
+  courseCode      String   @unique @map("course_code") @db.VarChar(25)
+  description     String   @db.Text
+  academicPeriod  String   @map("academic_period") @db.VarChar(50)
+  credits         Int
+  classroomNumber String   @map("classroom_number") @db.VarChar(10)
+  preRequisite    String?  @default("Ninguno") @map("pre_requisite") @db.Text
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamp()
+  updateAt        DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp()
+
+  classification           CourseClassification[]
+  instructorCoursesProfile InstructorCourses[]
+  CourseSchedules          CourseSchedules[]
+  courseSection            CourseSection[]
+  announcements            Announcement[]
+
+  @@map("Courses")
+}
+
+model CourseSchedules {
+  id        String   @id @unique @default(uuid()) @map("uuid") @db.Uuid
+  day       String   @db.VarChar(10)
+  startTime DateTime @map("start_time") @db.Time()
+  endTime   DateTime @map("end_time") @db.Time()
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp()
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp()
+  courseId  String   @map("course_id") @db.Uuid
+  course    Course   @relation(fields: [courseId], references: [id])
+
+  @@map("CourseSchedules")
+}
+
+model InstructorCourses {
+  id           String            @id @unique @default(uuid()) @map("uuid") @db.Uuid
+  createdAt    DateTime          @default(now()) @map("created_at") @db.Timestamp()
+  updatedAt    DateTime          @updatedAt @map("updated_at") @db.Timestamp()
+  courseId     String            @map("course_id") @db.Uuid
+  course       Course            @relation(fields: [courseId], references: [id])
+  instructorId String            @map("instructor_id") @db.Uuid
+  instructor   InstructorProfile @relation(fields: [instructorId], references: [id])
+
+  @@map("InstructorCourses")
+}
+
+model CourseClassification {
+  id            String            @id @unique @default(uuid()) @map("uuid") @db.Uuid
+  courseId      String            @map("course_id") @db.Uuid
+  course        Course            @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  categoryId    Int               @map("category_id")
+  category      CourseCategory    @relation(fields: [categoryId], references: [id])
+  subcategoryId Int               @map("subcategory_id")
+  subcategory   CourseSubcategory @relation(fields: [subcategoryId], references: [id])
+
+  @@map("CourseClassifications")
+}
+
+model CourseSection {
+  id          String   @id @unique @default(uuid()) @map("uuid") @db.Uuid
+  weekNumber  Int?     @map("week_number")
+  title       String?  @db.VarChar(200)
+  description String   @db.Text
+  dateRange   String?  @map("date_range") @db.VarChar(200)
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamp()
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamp()
+  courseId    String   @map("course_id") @db.Uuid
+  course      Course   @relation(fields: [courseId], references: [id])
+
+  sectionContent SectionContent[]
+
+  @@map("CourseSections")
+}
+
+enum ResourceType {
+  Documento
+  Video
+  Tarea
+  Imagen
+  Cuestionario
+  Enlace
+  Otro
+}
+
+model SectionContent {
+  id          String        @id @unique @default(uuid()) @map("uuid") @db.Uuid
+  title       String        @db.VarChar(200)
+  description String        @db.Text
+  type        ResourceType  @default(Documento)
+  url         String?       @db.VarChar(255)
+  limitDate   DateTime?     @map("limit_date") @db.Timestamp()
+  timeLimit   DateTime?     @map("time_limit") @db.Time()
+  createdAt   DateTime      @default(now()) @map("created_at") @db.Timestamp()
+  updatedAt   DateTime      @updatedAt @map("updated_at") @db.Timestamp()
+  sectionId   String        @map("section_id") @db.Uuid
+  section     CourseSection @relation(fields: [sectionId], references: [id])
+
+  @@map("SectionContents")
+}
+
+enum AnnouncementType {
+  Normal
+  Importante
+  Urgente
+}
+
+model Announcement {
+  id          String           @id @unique @default(uuid()) @map("uuid") @db.Uuid
+  title       String           @db.VarChar(200)
+  description String           @db.Text
+  type        AnnouncementType @default(Normal)
+  createdAt   DateTime         @default(now()) @map("created_at") @db.Timestamp()
+  updatedAt   DateTime         @updatedAt @map("updated_at") @db.Timestamp()
+  courseId    String           @map("course_id") @db.Uuid
+  course      Course           @relation(fields: [courseId], references: [id])
+
+  @@map("Announcements")
 }

@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { SidebarTrigger } from "@/components/ui/sidebar"
+import { ModeToggle } from "./toggle"
 
 export function Header({ breadcrumb = null }) {
   return (
@@ -32,6 +33,7 @@ export function Header({ breadcrumb = null }) {
           <Button variant="ghost" size="icon">
             <Bell className="h-5 w-5" />
           </Button>
+          <ModeToggle />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="h-9 w-9 rounded-full p-0" size="icon">
