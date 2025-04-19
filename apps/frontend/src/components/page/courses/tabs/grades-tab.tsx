@@ -18,7 +18,7 @@ const userPermissions = {
   canManageGrades: true,
 };
 
-export default function RatingTab() {
+export default function GradesTab() {
   return (
     <Card>
       <CardHeader>

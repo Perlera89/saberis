@@ -21,8 +21,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ContentTab from "@/components/page/courses/tabs/content-tab";
 import AttendanceTab from "@/components/page/courses/tabs/attendance-tab";
 import ForumTab from "@/components/page/courses/tabs/forum-tab";
-import RatingTab from "@/components/page/courses/tabs/ratings-tab";
+import GradesTab from "@/components/page/courses/tabs/grades-tab";
 import InfoTab from "@/components/page/courses/tabs/info-tab";
+import MembersTab from "@/components/page/courses/tabs/members-tab";
 
 // Simulación de permisos de usuario (en una aplicación real, esto vendría del backend)
 const userPermissions = {
@@ -151,6 +152,7 @@ export default function CoursePage({ params }) {
             )}
             <TabsTrigger value="rating">Calificaciones</TabsTrigger>
             <TabsTrigger value="forum">Foro</TabsTrigger>
+            <TabsTrigger value="members">Estudiantes</TabsTrigger>
             <TabsTrigger value="info">Información</TabsTrigger>
           </TabsList>
 
@@ -163,11 +165,15 @@ export default function CoursePage({ params }) {
           </TabsContent>
 
           <TabsContent value="rating">
-            <RatingTab />
+            <GradesTab />
           </TabsContent>
 
           <TabsContent value="forum">
             <ForumTab />
+          </TabsContent>
+
+          <TabsContent value="members">
+            <MembersTab />
           </TabsContent>
 
           <TabsContent value="info">

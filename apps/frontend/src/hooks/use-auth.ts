@@ -32,7 +32,7 @@ export function useLogin(loginFn: (user: Partial<User>) => Promise<void>) {
     mutationFn: loginFn,
     onSuccess: () => {
       toast.success("Inicio de sesión exitoso");
-      router.push("/");
+      router.push("/dashboard");
     },
     onError: (error) => {
       console.log("error", error);
