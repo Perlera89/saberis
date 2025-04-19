@@ -146,9 +146,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               asChild
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
-              <a href="#">
-                <GraduationCap />
-                <span className="text-base font-semibold">Saberis</span>
+              <a
+                href="/dashboard"
+                className="flex items-center gap-2 font-medium"
+              >
+                <div className="flex h-6 w-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
+                  <GraduationCap className="size-4" />
+                </div>
+                Saberis
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>

@@ -1,8 +1,7 @@
-import { GraduationCap } from "lucide-react";
+import { RegisterForm } from "@/components/auth/register-form";
+import { GalleryVerticalEnd, GraduationCap } from "lucide-react";
 
-import { LoginForm } from "@/components/auth/login-form";
-
-export default function LoginPage() {
+export default function RegisterPage() {
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
       <div className="flex flex-col gap-4 p-6 md:p-10">
@@ -15,8 +14,8 @@ export default function LoginPage() {
           </a>
         </div>
         <div className="flex flex-1 items-center justify-center">
-          <div className="w-full max-w-xs">
-            <LoginForm />
+          <div className="w-full max-w-sm">
+            <RegisterForm />
           </div>
         </div>
       </div>
